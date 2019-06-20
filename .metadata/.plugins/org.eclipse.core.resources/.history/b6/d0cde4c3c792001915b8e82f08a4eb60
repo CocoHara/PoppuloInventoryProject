@@ -1,0 +1,171 @@
+package client;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.ParseException;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import model.Item;
+
+public class ParseInventory 
+{
+	boolean inInventory = false;
+	boolean inItem = false;
+	boolean inId = false;
+	boolean inName = false;
+	boolean inPrice = false;
+	boolean inCategory = false;
+	
+	Item currentItem;
+	List<Item> currentInventory;
+	
+	public List<Item> doParseInventory (String s)
+	{
+		try
+		{
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser pullParser = factory.newPullParser();
+			pullParser.setInput(new StringReader(s));
+			processDocument(pullParser);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return currentInventory;
+	}
+	
+	public void processDocument (XmlPullParser pullParser) throws XmlPullParserException, IOException, java.text.ParseException
+	{
+		int eventType = pullParser.getEventType();
+		
+		do
+		{
+			if (eventType == XmlPullParser.START_DOCUMENT)
+			{
+				System.out.println("Start Document");
+			}
+			else if (eventType == XmlPullParser.END_DOCUMENT)
+			{
+				System.out.println("End Document");
+			}
+			else if (eventType == XmlPullParser.START_TAG)
+			{
+				processStartElement(pullParser);
+			}
+			else if (eventType == XmlPullParser.END_TAG)
+			{
+				processEndElement(pullParser);
+			}
+			else if (eventType == XmlPullParser.TEXT)
+			{
+				processText(pullParser);
+			}
+			
+			eventType = pullParser.next();
+		} while (eventType != XmlPullParser.END_DOCUMENT);
+	}
+	
+	public void processStartElement (XmlPullParser event)
+	{
+		String name = event.getName();
+		
+		if (name.equals("inventory"))
+		{
+			inInventory = true;
+			currentInventory = new ArrayList<Item>();
+		}
+		else if (name.equals("item"))
+		{
+			inItem = true;
+			currentItem = new Item();
+		}
+		else if (name.equals("id"))
+		{
+			inId = true;
+		}
+		else if (name.equals("name"))
+		{
+			inName = true;
+		}
+		else if (name.equals("price"))
+		{
+			inPrice = true;
+		}
+		else if (name.equals("category"))
+		{
+			inCategory = true;
+		}
+	}
+	
+	public void processText (XmlPullParser event) throws XmlPullParserException, java.text.ParseException
+	{
+		if (inId)
+		{
+			String s = event.getText();
+			currentItem.setId(Integer.parseInt(s));
+		}
+		if (inName)
+		{
+			String s = event.getText();
+			currentItem.setName(s);
+		}
+		if (inPrice)
+		{
+			String s = event.getText().toString();
+			DecimalFormat decimalFormat = new DecimalFormat();
+			try
+			{
+				double price = decimalFormat.parse(s).doubleValue();
+				currentItem.setPrice(price);
+			}
+			catch (ParseException e) 
+			{
+				   System.out.println(s + " is not a valid number.");
+			}
+		}
+		if (inCategory)
+		{
+			String s = event.getText();
+			currentItem.setCategory(s);
+		}
+	}
+	
+	public void processEndElement (XmlPullParser event)
+	{
+		String name = event.getName();
+		
+		if (name.equals("inventory"))
+		{
+			inInventory = false;
+		}
+		else if (name.equals("item"))
+		{
+			inItem = false;
+			currentInventory.add(currentItem);
+		}
+		else if (name.equals("id"))
+		{
+			inId = false;
+		}
+		else if (name.equals("name"))
+		{
+			inName = false;
+		}
+		else if (name.equals("price"))
+		{
+			inPrice = false;
+		}
+		else if (name.equals("category"))
+		{
+			inCategory = false;
+		}
+	}
+}

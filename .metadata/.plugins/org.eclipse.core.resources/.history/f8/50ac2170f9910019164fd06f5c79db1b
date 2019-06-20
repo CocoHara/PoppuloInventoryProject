@@ -1,0 +1,74 @@
+package server;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
+@Path("/inventory")
+public class InventoryResource 
+{
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
+	public List<Item> getAllItems() throws Exception
+	{
+		return InventoryDAO.instance.getAllItems();
+	}
+	
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void addItem(@FormParam("title") String title,
+			@FormParam("rating") double rating,
+			@FormParam("category") String category,
+			@Context HttpServletResponse servletResponse) throws Exception
+	{
+		System.out.println("Inside POST = " + title);
+		
+		Item Item = new Item();
+		Item.setName(title);
+		Item.setPrice(rating);
+		Item.setCategory(category);
+		
+		InventoryDAO.instance.addItem(Item);
+		
+		servletResponse.sendRedirect("../addItem.html");
+	}
+	
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void updateItem(@FormParam("title") String title,
+			@FormParam("rating") double rating,
+			@Context HttpServletResponse servletResponse) throws Exception
+	{
+		System.out.println("Inside POST = " + title);
+		
+		Item Item = new Item();
+		Item.setTitle(title);
+		Item.setRating(rating);
+		
+		InventoryDAO.instance.updateItem(Item);
+		
+		servletResponse.sendRedirect("../updateItem.html");
+	}
+	
+	@DELETE
+	@Produces(MediaType.TEXT_HTML)
+	@Path("{ItemTitle}")
+	public void deleteItem(@PathParam("ItemTitle") String title) throws Exception
+	{
+		System.out.println("Deleting = " + title);
+		
+		InventoryDAO.instance.deleteItem(title);
+	}
+}

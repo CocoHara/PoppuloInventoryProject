@@ -1,0 +1,10 @@
+package server;
+
+@XmlRootElement(name = "game")
+//Optional
+@XmlType(propOrder = { "id", "title", "rating" })
+
+public class Item 
+{
+
+}

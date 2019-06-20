@@ -1,0 +1,177 @@
+package client;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+
+import model.Item;
+
+public class MainWindow 
+{
+	private static Scanner scanner = new Scanner(System.in);
+	
+	public static void main(String[] args) throws ClientProtocolException, URISyntaxException, IOException 
+	{
+		int input = 0;
+		
+		while (input != 5)
+		{
+			System.out.println("-- Welcome to the Poppulo Inventory System --\n");
+			System.out.println("1. View Items in the Inventory");
+			System.out.println("2. Add Items to Inventory");
+			System.out.println("3. Update an Item in the Inventory");
+			System.out.println("4. Delete an Item from the Inventory");
+			System.out.println("5. Exit\n");
+			
+			System.out.print("What would you like to do (1 - 4, 5 to exit): ");
+			input = Integer.parseInt(scanner.nextLine());
+			
+			switch (input)
+			{
+			case 1:
+				readItems();
+				break;
+			case 2:
+				addItem();
+				break;
+			case 3:
+				updateItem();
+				break;
+			case 4:
+				deleteItem();
+				break;
+			case 5:
+				break;
+			default:
+				System.out.println("Invalid Option! Please try again.");
+				break;
+			}
+		}
+	}
+	
+	private static void readItems()
+	{
+		int input = 0;
+		
+		while (input != 4)
+		{
+			System.out.println("-- Inventory Item Viewer --");
+			System.out.println("1. View all Items from a given Category");
+			System.out.println("2. View Items of a certain Price Range");
+			System.out.println("3. View the last number of Items added");
+			System.out.println("4. Exit\n");
+			
+			System.out.print("What would you like to do (1 - 3, 4 to exit): ");
+			input = Integer.parseInt(scanner.nextLine());
+			
+			switch (input)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			default:
+				System.out.println("Invalid Option! Please try again.");
+				break;
+			}
+		}
+		
+	}
+	
+	private static void addItem() throws URISyntaxException, ClientProtocolException, IOException
+	{
+		String input = null;
+		Item item = new Item();
+		
+		do
+		{
+			System.out.println("-- Add Item to the Inventory --");
+			System.out.print("Name of Item: ");
+			item.setName(scanner.nextLine());
+			System.out.print("Price: ");
+			item.setPrice(Double.parseDouble(scanner.nextLine()));
+			System.out.print("Category: ");
+			item.setCategory(scanner.nextLine());
+			
+			URI uri = new URIBuilder().setScheme("http").setHost("localhost")
+					.setPort(8080).setPath("/InventoryServer/rest/inventory").build();
+			
+			//System.out.println(uri.toString());
+			
+			HttpPost httpPost = new HttpPost(uri);
+			httpPost.setHeader("Accept", "text/html");
+			CloseableHttpClient client = HttpClients.createDefault();
+			
+			// POST
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs.add(new BasicNameValuePair("name", item.getName()));
+			nameValuePairs.add(new BasicNameValuePair("price", Double.toString(item.getPrice())));
+			nameValuePairs.add(new BasicNameValuePair("category", item.getCategory()));
+			
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			//System.out.println("Sending Request...");
+			CloseableHttpResponse response = client.execute(httpPost);
+			
+			//System.out.println("Response: " + response.toString());
+			
+			System.out.print("Would you like to add another item? (y/n): ");
+			input = scanner.nextLine();
+			
+		} while (!input.equals("n"));
+	}
+	
+	private static void updateItem()
+	{
+		
+	}
+	
+	private static void deleteItem() throws URISyntaxException, ClientProtocolException, IOException
+	{
+		String input = null;
+		String name = null;
+		
+		do
+		{
+			System.out.println("-- Delete Item to the Inventory --");
+			System.out.print("Name of Item: ");
+			name = scanner.nextLine();
+			
+			URI uri = new URIBuilder().setScheme("http")
+					.setHost("localhost")
+					.setPort(8080)
+					.setPath("/GameListServer/rest/games/" + name)
+					.build();
+			
+			//System.out.println(uri.toString());
+			HttpDelete httpDelete = new HttpDelete(uri);
+			httpDelete.setHeader("Accept", "text/html");
+			
+			CloseableHttpClient client = HttpClients.createDefault();
+			//System.out.println("Sending DELETE request...");
+			CloseableHttpResponse response = client.execute(httpDelete);
+			//System.out.println("Response: " + response.toString());
+			
+			System.out.print("Would you like to add another item? (y/n): ");
+			input = scanner.nextLine();
+			
+		} while (!input.equals("n"));
+	}
+}

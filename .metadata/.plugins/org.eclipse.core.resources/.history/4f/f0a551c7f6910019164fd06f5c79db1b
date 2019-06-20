@@ -1,0 +1,75 @@
+package server;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.Path;
+
+@Path("/games")
+public enum InventoryDAO 
+{
+	instance;
+	
+	public List<Game> getAllGames() throws Exception
+	{
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("select id, title, rating from games");
+		
+		ArrayList<Game> list = new ArrayList<Game>();
+		while (rs.next())
+		{
+			int id = rs.getInt("id") + 1;
+			String title = rs.getString("title");
+			double rating = rs.getDouble("rating");
+			Game game = new Game(id, title, rating);
+			list.add(game);
+		}
+		
+		stmt.close();
+		conn.close();
+		
+		return list;
+	}
+	
+	public void addGame (Game game) throws Exception
+	{
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
+		Statement stmt = conn.createStatement();
+		
+		stmt.executeUpdate("insert into games (title, rating) values ('" + game.getTitle() + "', '" + game.getRating() + "')");
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	public void updateGame (Game game) throws Exception
+	{
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
+		Statement stmt = conn.createStatement();
+		
+		stmt.executeUpdate("update games set rating='" + game.getRating() + "' where title='" + game.getTitle() + "'");
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	public void deleteGame (String title) throws Exception
+	{
+		Class.forName("org.hsqldb.jdbc.JDBCDriver");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
+		Statement stmt = conn.createStatement();
+		
+		stmt.executeUpdate("delete from games where title='" + title + "'");
+		
+		stmt.close();
+		conn.close();
+	}	
+}

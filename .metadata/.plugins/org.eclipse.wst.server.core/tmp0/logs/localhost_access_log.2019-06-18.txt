@@ -1,0 +1,8 @@
+127.0.0.1 - - [18/Jun/2019:22:34:29 +0100] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [18/Jun/2019:22:34:29 +0100] "GET /InventoryServer/ HTTP/1.1" 404 1026
+0:0:0:0:0:0:0:1 - - [18/Jun/2019:22:35:24 +0100] "GET /InventoryServer/rest/inventory HTTP/1.1" 500 4389
+127.0.0.1 - - [18/Jun/2019:22:47:34 +0100] "POST /InventoryServer/rest/inventory HTTP/1.1" 500 4389
+127.0.0.1 - - [18/Jun/2019:22:50:57 +0100] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [18/Jun/2019:22:50:57 +0100] "GET /InventoryServer/ HTTP/1.1" 404 1026
+0:0:0:0:0:0:0:1 - - [18/Jun/2019:22:57:47 +0100] "GET /InventoryServer/rest/inventory HTTP/1.1" 500 4389
+0:0:0:0:0:0:0:1 - - [18/Jun/2019:22:57:55 +0100] "GET /InventoryServer/rest HTTP/1.1" 500 4389

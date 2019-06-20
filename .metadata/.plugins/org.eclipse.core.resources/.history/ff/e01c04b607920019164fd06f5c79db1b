@@ -1,0 +1,51 @@
+package client;
+
+public class MainWindow 
+{
+	public static void main(String[] args) 
+	{
+		int input = 0;
+		
+		while (input != 5)
+		{
+			System.out.println("-- Welcome to the Poppulo Inventory System --\n");
+			System.out.println("1. View Items in the Inventory");
+			System.out.println("2. Add Items to Inventory");
+			System.out.println("3. Update an Item in the Inventory");
+			System.out.println("4. Delete an Item from the Inventory");
+			System.out.println("5. Exit");
+			
+			switch (input)
+			{
+			case 1:
+				readItems();
+			case 2:
+				addItem();
+			case 3:
+				updateItem();
+			case 4:
+				deleteItem();
+			}
+		}
+	}
+	
+	private static void readItems()
+	{
+		
+	}
+	
+	private static void addItem()
+	{
+		
+	}
+	
+	private static void updateItem()
+	{
+		
+	}
+	
+	private static void deleteItem()
+	{
+		
+	}
+}

@@ -1,0 +1,57 @@
+package server;
+
+public class InventoryResource 
+{
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
+	public List<Game> getAllGames() throws Exception
+	{
+		return GameDAO.instance.getAllGames();
+	}
+	
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void addGame(@FormParam("title") String title,
+			@FormParam("rating") double rating,
+			@Context HttpServletResponse servletResponse) throws Exception
+	{
+		System.out.println("Inside POST = " + title);
+		
+		Game game = new Game();
+		game.setTitle(title);
+		game.setRating(rating);
+		
+		GameDAO.instance.addGame(game);
+		
+		servletResponse.sendRedirect("../addGame.html");
+	}
+	/*
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void updateGame(@FormParam("title") String title,
+			@FormParam("rating") double rating,
+			@Context HttpServletResponse servletResponse) throws Exception
+	{
+		System.out.println("Inside POST = " + title);
+		
+		Game game = new Game();
+		game.setTitle(title);
+		game.setRating(rating);
+		
+		GameDAO.instance.updateGame(game);
+		
+		servletResponse.sendRedirect("../updateGame.html");
+	}
+	*/
+	@DELETE
+	@Produces(MediaType.TEXT_HTML)
+	@Path("{gameTitle}")
+	public void deleteGame(@PathParam("gameTitle") String title) throws Exception
+	{
+		System.out.println("Deleting = " + title);
+		
+		GameDAO.instance.deleteGame(title);
+	}
+}

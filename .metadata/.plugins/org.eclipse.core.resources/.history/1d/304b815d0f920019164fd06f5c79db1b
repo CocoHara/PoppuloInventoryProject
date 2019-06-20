@@ -1,0 +1,98 @@
+package client;
+
+import java.util.Scanner;
+
+public class MainWindow 
+{
+	private static Scanner scanner = new Scanner(System.in);
+	
+	public static void main(String[] args) 
+	{
+		int input = 0;
+		
+		while (input != 5)
+		{
+			System.out.println("-- Welcome to the Poppulo Inventory System --\n");
+			System.out.println("1. View Items in the Inventory");
+			System.out.println("2. Add Items to Inventory");
+			System.out.println("3. Update an Item in the Inventory");
+			System.out.println("4. Delete an Item from the Inventory");
+			System.out.println("5. Exit\n");
+			
+			System.out.print("What would you like to do (1 - 4, 5 to exit): ");
+			input = scanner.nextInt();
+			
+			switch (input)
+			{
+			case 1:
+				readItems();
+				break;
+			case 2:
+				addItem();
+				break;
+			case 3:
+				updateItem();
+				break;
+			case 4:
+				deleteItem();
+				break;
+			case 5:
+				break;
+			default:
+				System.out.println("Invalid Option! Please try again.");
+				break;
+			}
+		}
+	}
+	
+	private static void readItems()
+	{
+		int input = 0;
+		
+		while (input != 4)
+		{
+			System.out.println("-- Inventory Item Viewer --");
+			System.out.println("1. View all Items from a given Category");
+			System.out.println("2. View Items of a certain Price Range");
+			System.out.println("3. View the last number of Items added");
+			System.out.println("4. Exit\n");
+			
+			System.out.print("What would you like to do (1 - 3, 4 to exit): ");
+			input = scanner.nextInt();
+			
+			switch (input)
+			{
+			case 1:
+				readItems();
+				break;
+			case 2:
+				addItem();
+				break;
+			case 3:
+				updateItem();
+				break;
+			case 4:
+				break;
+			default:
+				System.out.println("Invalid Option! Please try again.");
+				break;
+			}
+		}
+		
+	}
+	
+	private static void addItem()
+	{
+		
+	}
+	
+	private static void updateItem()
+	{
+		
+	}
+	
+	private static void deleteItem()
+	{
+		
+	}
+}
