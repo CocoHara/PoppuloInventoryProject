@@ -28,14 +28,7 @@ public class MainWindow
 {
 	private static Scanner scanner = new Scanner(System.in);
 	
-	/** Start-Up Main Menu 
-	 * input what you would like to do using numbers 1, 2, 3, 4, and 5 to exit
-	 * 
-	 * @param args
-	 * @throws ClientProtocolException
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
+	// Start-Up Main Menu input what you would like to do using numbers 1, 2, 3, 4, and 5 to exit
 	public static void main(String[] args) throws ClientProtocolException, URISyntaxException, IOException 
 	{
 		int input = 0;
@@ -75,11 +68,6 @@ public class MainWindow
 		}
 	}
 	
-	/** This method gives the user options on how to view the Inventory.
-	 *  The user picks an option and that creates a URI to send a GET request
-	 *  
-	 * @throws URISyntaxException
-	 */
 	private static void readItems() throws URISyntaxException
 	{
 		int option = 0;
@@ -132,13 +120,6 @@ public class MainWindow
 		}	
 	}
 	
-	/** This method is called after the user chooses what they want to view in the Inventory
-	 *  The method creates and executes a http GET request to the server.
-	 *  A response is then received and parsed into a List using a XMLPullParser class
-	 *  The list is then printed out onto the screen
-	 *  
-	 * @param uri
-	 */
 	private static void getItems(URI uri)
 	{
 		try
@@ -195,14 +176,6 @@ public class MainWindow
 		return out.toString();
 	}
 	
-	/**
-	 * This method adds a new Item to the Inventory using a http POST request.
-	 * the user inputs the details of the new item on screen and this method creates and sends nameValuePairs using those details on to the server.
-	 * 
-	 * @throws URISyntaxException
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
 	private static void addItem() throws URISyntaxException, ClientProtocolException, IOException
 	{
 		String input = null;
@@ -240,15 +213,6 @@ public class MainWindow
 		} while (!input.equals("n"));
 	}
 	
-	/**
-	 * This method asks the user what they want to update, the price or the category of an item
-	 * Input is then taken from the user of what item they want to update and what they are updating (price/category) and creates an item object
-	 * The updater() method is then called
-	 * 
-	 * @throws ClientProtocolException
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
 	private static void updateItem() throws ClientProtocolException, URISyntaxException, IOException
 	{
 		int input = 0;
@@ -293,15 +257,6 @@ public class MainWindow
 		} while (input != 3);
 	}
 	
-	/**
-	 * This method creates a URI using the name of the item the user wants to update
-	 * The method then sends a http POST request with the items updated details as nameValuePairs to change in the inventory
-	 * 
-	 * @param item
-	 * @throws URISyntaxException
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
 	private static void updater(Item item) throws URISyntaxException, ClientProtocolException, IOException
 	{
 		URI uri = new URIBuilder().setScheme("http").setHost("localhost")
@@ -321,15 +276,6 @@ public class MainWindow
 		CloseableHttpResponse response = client.execute(httpPost);
 	}
 	
-	/**
-	 * This method asks the user for the name of the item they want to delete from the inventory
-	 * The method then creates a URI using the input from the user (item name)
-	 * A http DELETE request is executed to delete the item from the inventory
-	 * 
-	 * @throws URISyntaxException
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
 	private static void deleteItem() throws URISyntaxException, ClientProtocolException, IOException
 	{
 		String input = null;
